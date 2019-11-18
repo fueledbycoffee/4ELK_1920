@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  form(action='/delete/#{movie._id}', method='POST')
+    h1 Êtes-vous sûr de vouloir supprimer #{movie.title} ? 
+    .form-group
+      .btn-group
+        button.btn.btn-primary(type="submit") Delete that sucker !
+        a(href="/")
+          button.btn.btn-danger(type="button") Cancel
