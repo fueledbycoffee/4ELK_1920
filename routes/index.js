@@ -3,12 +3,36 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+
+  // La liste de tous les films
+
   res.render('index', { title: 'Express' });
 });
 
-router.get('/toto', (req, res, next) => {
-  res.send("Hello");
+router.get('/create', (req,res, next) => {
+  //Afficher le formulaire de création
+  res.render('create');
+});
+router.post('/create', (req,res, next) => {
+
+});
+router.get('/view/:id', (req, res,next) => {
+  //Afficher un film
+
+});
+router.get('/edit/:id', (req,res, next) => {
+  //Modifier un film
+
+});
+router.post('/edit/:id', (req,res, next) => {
+
+});
+router.get('/delete/:id', (req,res, next)=> {
+  //Supprimer un film
 })
+router.post('/delete/:id', (req,res,next) => {
+})
+
 
 
 // const maFonction = () => {
