@@ -3,11 +3,10 @@ var router = express.Router();
 const mongoose = require('mongoose');/////////////////////////
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
 
   // La liste de tous les films
-
-  res.render('index', { title: 'Express' });
+  mongoose.model('Movie').find({}, (err, items) => res.render('index', { movies : items }));
 });
 
 router.get('/create', (req, res, next) => {
