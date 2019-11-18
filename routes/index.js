@@ -6,7 +6,7 @@ const mongoose = require('mongoose');/////////////////////////
 router.get('/', (req, res, next) => {
 
   // La liste de tous les films
-  mongoose.model('Movie').find({}, (err, items) => res.render('index', { movies : items }));
+  mongoose.model('Movie').find({}, (err, items) => res.render('index', { movies: items }));
 });
 
 router.get('/create', (req, res, next) => {
@@ -26,19 +26,43 @@ router.post('/create', (req, res, next) => {
 });
 router.get('/view/:id', (req, res, next) => {
   //Afficher un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    if (err)
+      return res.send(err);
 
+    res.render('view', { movie })
+  });
 });
 router.get('/edit/:id', (req, res, next) => {
   //Modifier un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    if (err)
+      return res.send(err);
 
+    res.render('edit', { movie });
+  });
 });
 router.post('/edit/:id', (req, res, next) => {
-
+  mongoose.model('Movie').findByIdAndUpdate(req.params.id, req.body, (err, movie) => {
+    if(err)
+      return res.send(err);
+    
+    res.redirect('/');
+  })
 });
 router.get('/delete/:id', (req, res, next) => {
   //Supprimer un film
+  mongoose.model('Movie').findById(req.params.id, (err, movie) => {
+    res.render('delete', { movie });
+  });
 })
 router.post('/delete/:id', (req, res, next) => {
+  mongoose.model('Movie').findByIdAndDelete(req.params.id, (err, movie) => {
+    if (err)
+      return res.send(err);
+
+    res.redirect('/');
+  })
 })
 
 
