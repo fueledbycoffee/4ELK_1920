@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const mongoose = require('mongoose');/////////////////////////
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -9,28 +10,36 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/create', (req,res, next) => {
+router.get('/create', (req, res, next) => {
   //Afficher le formulaire de création
   res.render('create');
 });
-router.post('/create', (req,res, next) => {
+router.post('/create', (req, res, next) => {
+  const movie = req.body;
 
+  mongoose.model('Movie').create(movie, (err, item) => {
+    if (!err)
+      return res.redirect('/');
+
+    console.log(err);
+    res.send(err);
+  })
 });
-router.get('/view/:id', (req, res,next) => {
+router.get('/view/:id', (req, res, next) => {
   //Afficher un film
 
 });
-router.get('/edit/:id', (req,res, next) => {
+router.get('/edit/:id', (req, res, next) => {
   //Modifier un film
 
 });
-router.post('/edit/:id', (req,res, next) => {
+router.post('/edit/:id', (req, res, next) => {
 
 });
-router.get('/delete/:id', (req,res, next)=> {
+router.get('/delete/:id', (req, res, next) => {
   //Supprimer un film
 })
-router.post('/delete/:id', (req,res,next) => {
+router.post('/delete/:id', (req, res, next) => {
 })
 
 
