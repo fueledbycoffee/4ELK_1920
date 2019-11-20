@@ -18,6 +18,7 @@ let MovieSchema = new Schema({
         type: String,
         es_indexed: true,
     },
+    seen: { type: Boolean, default: false, es_indexed: true },
 });
 MovieSchema.plugin(mongoosastic);
 

@@ -16,6 +16,8 @@ router.get('/create', (req, res, next) => {
 router.post('/create', (req, res, next) => {
   const movie = req.body;
 
+  movie.seen = movie.seen === 'on';
+
   mongoose.model('Movie').create(movie, (err, item) => {
     if (!err)
       return res.redirect('/');
@@ -43,7 +45,11 @@ router.get('/edit/:id', (req, res, next) => {
   });
 });
 router.post('/edit/:id', (req, res, next) => {
-  mongoose.model('Movie').findByIdAndUpdate(req.params.id, req.body, (err, movie) => {
+  
+  const movie = req.body;
+
+  movie.seen = movie.seen === 'on';
+  mongoose.model('Movie').findByIdAndUpdate(req.params.id, movie, (err, movie) => {
     if (err)
       return res.send(err);
 
