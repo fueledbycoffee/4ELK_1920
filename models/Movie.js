@@ -46,7 +46,7 @@ Movie.createMapping({
                 ]
             },
             keyword_analyzer : {
-                tokenizer : 'keyword',
+                tokenizer : 'standard',
                 filter: [
                     'lowercase',
                     'asciifolding'

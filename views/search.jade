@@ -10,6 +10,7 @@ block content
   table.table
     thead
       th Title
+      th Score
       //- th Release Date
       //- th IMDb Rating
       //- th actors
@@ -20,6 +21,8 @@ block content
         tr
           td
             a(href='/view/#{movie._id}') #{movie.title}
+          td
+            #{movie._score}
           //- td #{moment(movie.release_date).format("DD/MM/YYYY")}
           //- td #{movie.imdb_rating}
           //- td #{movie.runtime}
