@@ -45,7 +45,7 @@ router.get('/edit/:id', (req, res, next) => {
   });
 });
 router.post('/edit/:id', (req, res, next) => {
-  
+
   const movie = req.body;
 
   movie.seen = movie.seen === 'on';
@@ -94,7 +94,7 @@ router.get('/search', (req, res, next) => {
           match: {
             'title.keyword': {
               'query': req.query.q,
-              'operator' : 'and',
+              'operator': 'and',
               'boost': 5.0,
             }
           }
@@ -114,7 +114,9 @@ router.get('/search', (req, res, next) => {
   });
 });
 
-
+// filter :{
+//  term: { seen : false }
+// }
 
 
 //ça déconne...
@@ -131,6 +133,36 @@ router.get('/fuzzy', (req, res, next) => {
   }, (err, items) => res.send(err || items));
 });
 
+router.get('/seen', (req, res, next) => {
+  let match = req.query.q ? {
+    match: {
+      'title.ngram': {
+        query: req.query.q,
+        fuzziness: 'AUTO'
+      }
+    }
+  } : { match_all: {} }
+  const request = {
+    bool: {
+      filter: {
+        term: { seen: req.query.seen === 'true' }
+      },
+      must: match
+    }
+  };
+
+  mongoose.model('Movie').search(request, (err, items) => {
+    if (!err && items) {
+      const movies = items.hits.hits.map(item => {
+        const movie = item._source;
+        movie._id = item._id;
+        movie._score = item._score;
+        return movie;
+      })
+      res.render('search', { movies })
+    }
+  });
+});
 // router.get('/searchH', (req, res, next) => {
 //   mongoose.model('Movie').search({
 //     match: {
