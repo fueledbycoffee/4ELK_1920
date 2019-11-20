@@ -44,9 +44,9 @@ router.get('/edit/:id', (req, res, next) => {
 });
 router.post('/edit/:id', (req, res, next) => {
   mongoose.model('Movie').findByIdAndUpdate(req.params.id, req.body, (err, movie) => {
-    if(err)
+    if (err)
       return res.send(err);
-    
+
     res.redirect('/');
   })
 });
@@ -65,7 +65,23 @@ router.post('/delete/:id', (req, res, next) => {
   })
 })
 
-
+router.get('/search', (req, res, next) => {
+  mongoose.model('Movie').search({
+    match: {
+      title: req.query.q
+    }
+  }, (err, items) => {
+    if(!err && items)
+    {
+      const movies = items.hits.hits.map(item => {
+        const movie = item._source;
+        movie._id = item._id;
+        return movie;
+      })
+      res.render('search', { movies })
+    }
+  } );
+})
 
 // const maFonction = () => {
 //   const promesse = new Promise();
