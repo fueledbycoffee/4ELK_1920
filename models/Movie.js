@@ -24,8 +24,13 @@ MovieSchema.plugin(mongoosastic);
 
 const Movie = mongoose.model('Movie', MovieSchema);
 
+// createMapping permet de définir un mapping custom de nos données au sein d'ElasticSearch
 Movie.createMapping({
+    //le tout se mets dans un block analysis
     analysis : {
+        // on définit un filtre (voir ça au sens filtre instagram qui modifie les donénes plutôt qu'un filtre qui retire des choses)
+        // on crée un filtre nGram (cf. cours)
+        // on précise que l'on souhaite conserver lettres, chiffres, symboles et ponctuation
         filter : {
             ngram_filter: {
                 type: 'nGram',
@@ -36,7 +41,10 @@ Movie.createMapping({
                 ]
             }
         },
+        // ensuite dans le bloc analyzer on définir les differents "blocs" qui vont indexer nos données selon les regles que l'on a défini
+        // ici on en a deux ngram_analyzer et keyword_analyzer
         analyzer : {
+            // l'analyzer nGram va être de type custom et on lui passe les filtres à utiliser
             ngram_analyzer : {
                 type: 'custom',
                 tokenizer: 'whitespace',
@@ -46,6 +54,7 @@ Movie.createMapping({
                     'ngram_filter'
                 ]
             },
+            // celui ci est standard, nous ajoutons juste un asciifolding pour ignorer les accents
             keyword_analyzer : {
                 tokenizer : 'standard',
                 filter: [
@@ -62,6 +71,7 @@ Movie.createMapping({
     console.log(mapping);
 });
 
+// on synchronise les données depuis MongoDb dans ES
 const stream = Movie.synchronize();
 let count = 0;
 
