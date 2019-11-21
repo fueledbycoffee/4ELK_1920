@@ -164,6 +164,11 @@ router.get('/search', (req, res, next) => {
 });
 
 router.get('/advsearch', (req, res, next) => {
+  res.render('advsearch');
+});
+
+router.post('/advsearch', (req, res, next) => {
+  res.render('search');
 });
 
 //ça déconne...
