@@ -21,6 +21,9 @@ block content
       input#seen(type="checkbox", name="seen")
       | Seen ?
     .form-group
+      label(for='tags') Tags
+      input#tags.form-control(name="tags", type="text")
+    .form-group
       .btn-group
         button.btn.btn-primary(type="submit") Create
         a(href="/")

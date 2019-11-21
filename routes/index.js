@@ -27,6 +27,8 @@ router.post('/create', (req, res, next) => {
   // Vu qu'un checkbox nous fournit deux valeurs 'on' ou null ici on le transforme en boolean true/false
   movie.seen = movie.seen === 'on';
 
+  movie.tags = movie.tags.split(',');
+
   mongoose.model('Movie').create(movie, (err, item) => {
 
     //S'il n'y a pas d'erreur on redirige vers la home
@@ -63,7 +65,7 @@ router.post('/edit/:id', (req, res, next) => {
   const movie = req.body;
 
   movie.seen = movie.seen === 'on';
-  
+
   //permet de mettre à jour un element
   mongoose.model('Movie').findByIdAndUpdate(req.params.id, movie, (err, movie) => {
     if (err)
@@ -118,7 +120,32 @@ router.get('/search', (req, res, next) => {
               'boost': 5.0,
             }
           }
-        }
+        },
+        {
+          match: {
+            'tags.keyword': {
+              'query': req.query.q,
+              'operator': 'or',
+              'boost': 2.0,
+            }
+          }
+        },
+        {
+          function_score: {
+            query: {
+              match: {
+                'tags.ngram': {
+                  query: req.query.q,
+                  // permet les fautes de frappes
+                  fuzziness: 'AUTO'
+                }
+              }
+            },
+            script_score: {
+              script: '_score * 1'
+            }
+          }
+        },
       ]
     }
   }, (err, items) => {
